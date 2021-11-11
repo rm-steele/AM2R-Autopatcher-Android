@@ -1,4 +1,9 @@
-VERSION="multitroid-14"
+#!/bin/bash
+
+# exit on any error to avoid showing everything was successfull even tho it wasnt
+set -e
+
+VERSION="multitroid-141"
 OUTPUT="am2r_"${VERSION}
 INPUT=""
 
@@ -35,7 +40,7 @@ echo ""
 echo "-------------------------------------------"
 
 #install dependencies
-pkg install subversion zip unzip xdelta3 -y
+pkg install -y subversion zip unzip xdelta3
 
 #check if apkmod is instaled, if not install it. I only use this for signing 'cause it's the only way I found this to work
 if ! [ -f /data/data/com.termux/files/usr/bin/apkmod ]; then
@@ -86,7 +91,9 @@ xdelta3 -dfs "${OUTPUT}"/data.win data/droid.xdelta  "${OUTPUT}"/game.droid
 rm "${OUTPUT}"/D3DX9_43.dll "${OUTPUT}"/AM2R.exe "${OUTPUT}"/data.win 
 
 #cp -RTp "${OUTPUT}"/ utilities/android/assets/
-cp -p data/android/AM2R.ini "${OUTPUT}"/
+if [ -f data/android/AM2R.ini ]; then
+    cp -p data/android/AM2R.ini "${OUTPUT}"/
+fi
 
 
 # Music
@@ -126,7 +133,7 @@ rm temp.zip
 
 echo "Packaging APK..."
 #decompile the apk
-apkmod -d data/android/AM2RWrapper.apk -o AM2RWrapper
+apkmod -d -i data/android/AM2RWrapper.apk -o AM2RWrapper
 #copy
 mv "${OUTPUT}" assets
 cp -Rp assets AM2RWrapper
@@ -134,9 +141,9 @@ cp -Rp assets AM2RWrapper
 echo "Editing apktool.yml..."
 sed -i "s/doNotCompress:/doNotCompress:\n- ogg/" AM2RWrapper/apktool.yml
 #build
-apkmod -r AM2RWrapper -o AM2R-"${VERSION}".apk
+apkmod -r -i AM2RWrapper -o AM2R-"${VERSION}".apk
 #Sign apk
-apkmod -s AM2R-"${VERSION}".apk -o AM2R-"${VERSION}"-signed.apk
+apkmod -s -i AM2R-"${VERSION}".apk -o AM2R-"${VERSION}"-signed.apk
 
 # Cleanup
 rm -R assets/ AM2RWrapper/ data/ AM2R-"${VERSION}".apk
