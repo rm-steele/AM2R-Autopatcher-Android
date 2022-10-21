@@ -3,7 +3,7 @@
 # exit on any error to avoid showing everything was successfull even tho it wasnt
 set -e
 
-VERSION="multitroid-141"
+VERSION="multitroid-160"
 OUTPUT="am2r_"${VERSION}
 INPUT=""
 
@@ -34,7 +34,7 @@ fi
 
 echo "-------------------------------------------"
 echo ""
-echo "AM2R Multitroid Shell Autopatching Utility"
+echo "AM2R Unofficial Multitroid Shell Autopatching Utility"
 echo "Scripted by Miepee and help from Lojemiru"
 echo ""
 echo "-------------------------------------------"
@@ -55,7 +55,7 @@ svn export https://github.com/Miepee/AM2R-Autopatcher-Android/trunk/data
 #download multitroid mod
 #check this for more info: https://gist.github.com/steinwaywhw/a4cd19cda655b8249d908261a62687f8
 echo "Downloading Multitroid..."
-curl -s https://api.github.com/repos/milesthenerd/AM2R-Multitroid/releases/latest | grep "browser_download_url.*win.zip" | cut -d : -f 2,3 | tr -d \" | wget -O multitroid.zip -qi -
+curl -s https://api.github.com/repos/DodoBirby/AM2R-Multitroid-Unofficial-Patch/releases/latest | grep "browser_download_url.*win.zip" | cut -d : -f 2,3 | tr -d \" | wget -O multitroid.zip -qi -
 
 #unzip into data/
 unzip -q -o multitroid.zip -d data
