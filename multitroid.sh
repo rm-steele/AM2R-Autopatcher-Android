@@ -1,5 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # Script written by Miepee, later modified by izzy2lost and rm_steele
+# used with permission, see this message i nthe am2r discord server
+# https://discord.com/channels/297870727422541826/297954856709390336/1338664797830385754
 
 # exit on any error to avoid showing everything was successfull even tho it wasnt
 set -e
