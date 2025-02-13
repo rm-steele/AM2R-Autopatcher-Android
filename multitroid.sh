@@ -1,9 +1,10 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
+# Script written by Miepee, later modified by izzy2lost and rm_steele
 
 # exit on any error to avoid showing everything was successfull even tho it wasnt
 set -e
 
-VERSION="multitroid-162"
+VERSION="multitroid-181"
 OUTPUT="am2r_"${VERSION}
 INPUT=""
 
@@ -31,7 +32,8 @@ fi
 if [ -f "multitroid.zip" ]; then
     rm -rf multitroid.zip
 fi
-
+    rm -rf data.zip
+    rm -rf HDR_HQ_in-game_music.zip
 echo "-------------------------------------------"
 echo ""
 echo "AM2R Unofficial Multitroid Shell Autopatching Utility"
@@ -40,7 +42,12 @@ echo ""
 echo "-------------------------------------------"
 
 #install dependencies
-pkg install -y subversion zip unzip xdelta3
+pkg install -y termux-am zip unzip wget xdelta3
+yes | termux-setup-storage
+
+# Makes it so termux can install apk at the end of script 
+# commenting this out because it seems to go unused
+# wget -O ~/.termux/termux.properties https://github.com/izzy2fancy/termux-app/raw/sm64-builder/termux.properties
 
 #check if apkmod is instaled, if not install it. I only use this for signing 'cause it's the only way I found this to work
 if ! [ -f /data/data/com.termux/files/usr/bin/apkmod ]; then
@@ -50,15 +57,16 @@ if ! [ -f /data/data/com.termux/files/usr/bin/apkmod ]; then
 fi
 
 #download the patch data
-svn export https://github.com/Miepee/AM2R-Autopatcher-Android/trunk/data
+wget https://github.com/izzy2fancy/AM2R-Autopatcher-Android/releases/download/1.0/data.zip
+yes | unzip data.zip -d ./
 
 #download multitroid mod
 #check this for more info: https://gist.github.com/steinwaywhw/a4cd19cda655b8249d908261a62687f8
 echo "Downloading Multitroid..."
-curl -s https://api.github.com/repos/DodoBirby/AM2R-Multitroid-Unofficial-Patch/releases/latest | grep "browser_download_url.*Windows.zip" | cut -d : -f 2,3 | tr -d \" | wget -O multitroid.zip -qi -
+wget https://github.com/VanessaMae1087/AM2R-Multitroid-Unofficial-Unofficial/releases/download/1.8.1/UnoUnoMultitroid1_8_1-U_Windows.zip
 
 #unzip into data/
-unzip -q -o multitroid.zip -d data
+unzip -q -o UnoUnoMultitroid1_8_1-U_Windows.zip -d data
 
 #clean up the unecessary files
 rm -rf data/AM2R.xdelta data/data.xdelta data/profile.xml data/files_to_copy/mods/ data/files_to_copy/lang/headers/
@@ -108,9 +116,10 @@ echo "[y/n]"
 read -n1 INPUT
 echo ""
 
-if [ $INPUT = "y" ]; then
+if [ "$INPUT" = "y" ]; then
     echo "Downloading HQ music..."
-    svn export https://github.com/Miepee/AM2R-Autopatcher-Android/trunk/HDR_HQ_in-game_music
+    wget https://github.com/izzy2fancy/AM2R-Autopatcher-Android/releases/download/2.0/HDR_HQ_in-game_music.zip
+yes | unzip HDR_HQ_in-game_music.zip -d ./
     echo "Copying HQ music..."
     cp -f HDR_HQ_in-game_music/*.ogg "${OUTPUT}"/
     rm -rf HDR_HQ_in-game_music/
